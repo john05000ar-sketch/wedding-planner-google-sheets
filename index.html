@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EverAfter Master Wedding Command Center &amp; Google Sheets Suite: Pro Commercial Suite 2026 — Live Interactive Showcase</title>
+  <meta name="description" content="### THE PROBLEM: WHY old SOLUTIONS COST YOU THOUSANDS. Decision fatigue, wedding budget runaway with unexpected venue fees, chaotic guest tracking across text messages, and endless stress coordinating reception tables. Wedding directories spam users with high-pressure vendor ads. Static printables cannot recalculate per-guest dinner costs..." />
+  <meta property="og:title" content="EverAfter Master Wedding Command Center &amp; Google Sheets Suite: Pro Commercial Suite 2026" />
+  <meta property="og:description" content="### THE PROBLEM: WHY old SOLUTIONS COST YOU THOUSANDS. Decision fatigue, wedding budget runaway with unexpected venue fees, chaotic guest tracking across text messages, and endless stress coordinating reception tables. Wedding directories spam users with high-pressure vendor ads. Static printables cannot recalculate per-guest dinner costs..." />
+  <meta property="og:type" content="website" />
+  <style>
+    :root {
+      --bg: #0B111E;
+      --card-bg: #131E32;
+      --accent: #2563EB;
+      --accent-glow: rgba(37, 99, 235, 0.4);
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border: #1E293B;
+      --emerald: #10B981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 60px; }
+    
+    /* Top conversion announcement bar */
+    .promo-bar {
+      background: linear-gradient(90deg, #1E3A8A, #2563EB);
+      color: #fff;
+      padding: 12px 20px;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .promo-btn {
+      background: #F59E0B;
+      color: #000;
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.15s ease;
+    }
+    .promo-btn:hover { transform: scale(1.05); }
+    
+    .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+    
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+      margin-bottom: 60px;
+    }
+    @media (max-width: 860px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+    
+    .badge {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    
+    h1 { font-size: 2.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 20px; letter-spacing: -0.02em; }
+    .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 30px; }
+    
+    .cta-group { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+    .btn-buy {
+      background: #2563EB;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px var(--accent-glow);
+      transition: all 0.2s ease;
+    }
+    .btn-buy:hover { background: #1D4ED8; transform: translateY(-2px); }
+    .btn-demo {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+    .btn-demo:hover { background: var(--card-bg); }
+    
+    .hero-media-wrapper {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .hero-media-img { width: 100%; height: auto; display: block; }
+    
+    /* Interactive Live Demo Frame */
+    .demo-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 60px;
+    }
+    .demo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+    .demo-frame {
+      width: 100%;
+      height: 650px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0D1424;
+    }
+    
+    /* Bento Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .feature-icon { font-size: 1.8rem; margin-bottom: 12px; }
+    .feature-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+    .feature-text { color: var(--text-muted); font-size: 0.95rem; }
+    
+    footer { text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 40px 0; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+  <div class="promo-bar">
+    <span>⚡ Instant Download: EverAfter Master Wedding Command Center &amp; Google Sheets Suite: Pro Commercial Suite 2026</span>
+    <a href="https://whop.com/checkout/plan_r2alb3rSFxuDn" target="_blank" class="promo-btn">Get Instant Access ($29)</a>
+    <a href="https://whop.com/checkout/plan_r2alb3rSFxuDn" target="_blank" class="promo-btn" style="background:#2563EB;color:#fff;">Buy on Whop ($29)</a>
+  </div>
+
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="badge">● 100% Offline-First Security</div>
+        <h1>EverAfter Master Wedding Command Center &amp; Google Sheets Suite: Pro Commercial Suite 2026</h1>
+        <p class="subtitle">### THE PROBLEM: WHY old SOLUTIONS COST YOU THOUSANDS. Decision fatigue, wedding budget runaway with unexpected venue fees, chaotic guest tracking across text messages, and endless stress coordinating reception tables. Wedding directories spam users with high-pressure vendor ads. Static printables cannot recalculate per-guest dinner costs...</p>
+        <div class="cta-group">
+          <a href="https://eduardoar.gumroad.com/l/mtehne" target="_blank" class="btn-buy">
+            <span>Buy on Gumroad — $29</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://whop.com/checkout/plan_r2alb3rSFxuDn" target="_blank" class="btn-buy" style="background:linear-gradient(135deg,#3B82F6,#1D4ED8);"><span>Buy on Whop — $29</span></a>
+          <a href="#demo" class="btn-demo">Try Live Simulator ↓</a>
+        </div>
+      </div>
+      <div class="hero-media-wrapper">
+        <img src="video_wedding_planner_google_sheets_568184.gif" alt="EverAfter Master Wedding Command Center &amp; Google Sheets Suite: Pro Commercial Suite 2026" class="hero-media-img" />
+      </div>
+    </div>
+
+    
+    <div class="demo-section" id="demo">
+      <div class="demo-header">
+        <div>
+          <h2>Live Browser Sandbox</h2>
+          <p style="color: var(--text-muted);">Test real-time shock sliders directly in your browser. Zero wallet permissions and zero data tracking.</p>
+        </div>
+        <a href="https://eduardoar.gumroad.com/l/mtehne" target="_blank" class="btn-buy" style="padding: 10px 20px; font-size: 0.95rem;">Download Offline App & Excel ($29)</a>
+      </div>
+      <iframe src="demo.html" class="demo-frame" title="Interactive Simulator"></iframe>
+    </div>
+    
+
+    <div class="features-grid">
+      
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-title">Zero Wallet Connect</div>
+        <div class="feature-text">No seed phrases, no private keys, and no Web3 wallet permissions. Simulate collateral risk safely in complete isolation.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Real-Time Market Shocks</div>
+        <div class="feature-text">Drag sliders from -5% to -50% crash scenarios to instantly inspect liquidation thresholds across Aave v3, Compound v3, and Morpho.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Dual App &amp; Excel Workflow</div>
+        <div class="feature-text">Includes both the zero-dependency HTML5 application and the 137-formula companion spreadsheet for treasury teams.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 EverAfter Master Wedding Command Center &amp; Google Sheets Suite: Pro Commercial Suite 2026. Available on <a href="https://eduardoar.gumroad.com/l/mtehne" target="_blank" style="color: #60A5FA;">Gumroad</a> and <a href="https://whop.com/checkout/plan_r2alb3rSFxuDn" target="_blank" style="color: #60A5FA;">Whop</a>.</p>
+  </footer>
+
+</body>
+</html>

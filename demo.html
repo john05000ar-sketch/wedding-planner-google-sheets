@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EverAfter Master Wedding Command Center</title>
+  <style>
+    :root {
+      --bg-primary: #0F172A;
+      --bg-secondary: #1E293B;
+      --bg-card: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(212, 175, 55, 0.25);
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --accent-gold: #D4AF37;
+      --accent-gold-hover: #E6C86E;
+      --accent-blue: #38BDF8;
+      --accent-navy: #0F2942;
+      --accent-green: #10B981;
+      --accent-red: #EF4444;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #F8FAFC;
+      --bg-secondary: #FFFFFF;
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --border-color: #E2E8F0;
+      --text-primary: #0F172A;
+      --text-secondary: #64748B;
+      --accent-gold: #B8860B;
+      --accent-gold-hover: #D4AF37;
+      --accent-blue: #0284C7;
+      --accent-navy: #0F2942;
+      --accent-green: #059669;
+      --accent-red: #DC2626;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0F2942, #D4AF37);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: bold;
+      font-size: 1.25rem;
+      border: 1px solid var(--accent-gold);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title span {
+      color: var(--accent-gold);
+    }
+
+    .brand-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      border: none;
+      outline: none;
+      text-decoration: none;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--accent-gold), #B8860B);
+      color: #0F172A;
+      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.25);
+    }
+
+    .btn-gold:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-primary);
+      border-color: var(--accent-gold);
+    }
+
+    .nav-tabs {
+      display: flex;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0 2rem;
+      gap: 1rem;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 1rem 0.75rem;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      position: relative;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .tab-btn.active {
+      color: var(--accent-gold);
+    }
+
+    .tab-btn.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent-gold);
+      border-radius: 3px 3px 0 0;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .kpi-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .kpi-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+
+    .kpi-subtext {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      padding-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+    }
+
+    .input-control {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .input-control:focus {
+      border-color: var(--accent-gold);
+    }
+
+    .range-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .range-slider {
+      flex: 1;
+      accent-color: var(--accent-gold);
+      cursor: pointer;
+    }
+
+    .slider-val {
+      font-weight: 700;
+      min-width: 80px;
+      text-align: right;
+      color: var(--accent-gold);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    th {
+      padding: 0.75rem 1rem;
+      background: rgba(15, 41, 66, 0.4);
+      color: var(--accent-gold);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge {
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-warning {
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--accent-gold);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .badge-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent-red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .badge-info {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    /* Seating Map Visualizer */
+    .seating-studio {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .table-pod {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .table-pod:hover {
+      border-color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    .table-pod.active-pod {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .table-pod-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-name {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .table-capacity {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .meter-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .guest-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      min-height: 48px;
+    }
+
+    .guest-chip {
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Timeline styles */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      border-left: 2px solid var(--border-color);
+      margin-left: 1rem;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -2.45rem;
+      top: 0.25rem;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      border: 3px solid var(--bg-primary);
+    }
+
+    .timeline-time {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: auto;
+    }
+
+    .privacy-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+
+    @media print {
+      body {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+      }
+      header, .nav-tabs, footer, .btn, .range-slider {
+        display: none !important;
+      }
+      .tab-pane {
+        display: block !important;
+        margin-bottom: 2rem;
+      }
+      .card {
+        border: 1px solid #CCCCCC !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
+      th {
+        background: #EEEEEE !important;
+        color: #000000 !important;
+      }
+      td {
+        color: #000000 !important;
+      }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">EA</div>
+      <div>
+        <div class="brand-title">EverAfter <span>Command Center</span></div>
+        <div class="brand-subtitle">Master Wedding Financial & Guest Intelligence</div>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button class="btn btn-secondary" id="themeToggleBtn">Light Mode</button>
+      <button class="btn btn-secondary" id="exportCsvBtn">Export CSV</button>
+      <button class="btn btn-secondary" id="backupBtn">Backup Data</button>
+      <button class="btn btn-secondary" id="restoreBtn">Restore Data</button>
+      <input type="file" id="restoreFileInput" style="display: none;" accept=".json">
+      <button class="btn btn-gold" id="printBtn">Print Overview</button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" data-tab="tab-budget">Live Budget Balancer</button>
+    <button class="tab-btn" data-tab="tab-seating">Visual Seating Studio</button>
+    <button class="tab-btn" data-tab="tab-rsvp">RSVP & Meal Matrix</button>
+    <button class="tab-btn" data-tab="tab-timeline">Day-Of Master Itinerary</button>
+    <button class="tab-btn" data-tab="tab-vendors">Vendor Directory</button>
+  </div>
+
+  <main>
+    <!-- TAB 1: BUDGET BALANCER -->
+    <div class="tab-pane active" id="tab-budget">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Target Budget</div>
+          <div class="kpi-value" id="kpiTargetBudget">$45,000</div>
+          <div class="kpi-subtext">Overall financial benchmark</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Total Estimated Cost</div>
+          <div class="kpi-value" id="kpiTotalEstimated">$43,150</div>
+          <div class="kpi-subtext" id="kpiVarianceSubtext">$1,850 Under Budget (Safe)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Cost Per Attending Guest</div>
+          <div class="kpi-value" id="kpiCostPerGuest">$359.58</div>
+          <div class="kpi-subtext">Based on 120 attending guests</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Deposits Paid vs Due</div>
+          <div class="kpi-value" id="kpiDepositRatio">$21,800 / $21,350</div>
+          <div class="kpi-subtext">50.5% Paid / 49.5% Pending</div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <!-- Controls -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Interactive Budget Sliders</div>
+            <div class="btn-group">
+              <button class="btn btn-secondary" id="presetIntimateBtn">Intimate (50)</button>
+              <button class="btn btn-secondary" id="presetClassicBtn">Classic (120)</button>
+              <button class="btn btn-secondary" id="presetGrandBtn">Grand (200)</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Target Wedding Budget ($)</label>
+            <div class="range-container">
+              <input type="range" class="range-slider" id="inputTargetBudget" min="10000" max="100000" step="1000" value="45000">
+              <span class="slider-val" id="valTargetBudget">$45,000</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Expected Guest Count</label>
+            <div class="range-container">
+              <input type="range" class="range-slider" id="inputGuestCount" min="30" max="250" step="5" value="120">
+              <span class="slider-val" id="valGuestCount">120 Guests</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Reception Venue & Ceremony Fee ($)</label>
+            <div class="range-container">
+              <input type="range" class="range-slider" id="inputVenueFee" min="2000" max="25000" step="500" value="10500">
+              <span class="slider-val" id="valVenueFee">$10,500</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Plated Dinner Per-Guest ($)</label>
+            <div class="range-container">
+              <input type="range" class="range-slider" id="inputMealCost" min="30" max="200" step="5" value="77">
+              <span class="slider-val" id="valMealCost">$77 / plate</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Open Bar Per-Guest ($)</label>
+            <div class="range-container">
+              <input type="range" class="range-slider" id="inputBarCost" min="15" max="80" step="5" value="30">
+              <span class="slider-val" id="valBarCost">$30 / person</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Photography & Videography ($)</label>
+            <div class="range-container">
+              <input type="range" class="range-slider" id="inputPhotoVideo" min="1500" max="15000" step="200" value="6400">
+              <span class="slider-val" id="valPhotoVideo">$6,400</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Floral Design & Decor ($)</label>
+            <div class="range-container">
+              <input type="range" class="range-slider" id="inputFlorals" min="1000" max="12000" step="200" value="5000">
+              <span class="slider-val" id="valFlorals">$5,000</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Music, DJ & Entertainment ($)</label>
+            <div class="range-container">
+              <input type="range" class="range-slider" id="inputMusic" min="800" max="8000" step="150" value="1950">
+              <span class="slider-val" id="valMusic">$1,950</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Attire, Hair, Makeup & Rings ($)</label>
+            <div class="range-container">
+              <input type="range" class="range-slider" id="inputAttire" min="1500" max="15000" step="250" value="5800">
+              <span class="slider-val" id="valAttire">$5,800</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Breakdown & Visuals -->
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Live Category Breakdown</div>
+            </div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>Calculated Cost</th>
+                    <th>% of Total</th>
+                  </tr>
+                </thead>
+                <tbody id="budgetBreakdownTbody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Automated Financial Advice</div>
+            </div>
+            <div id="financialAdviceBox" style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary);">
+              Calculating automated tips...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: VISUAL SEATING STUDIO -->
+    <div class="tab-pane" id="tab-seating">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Visual Reception Floor Plan & Table Balancing</div>
+          <div>
+            <span class="badge badge-success">86 Confirmed Guests</span>
+            <span class="badge badge-info">12 Tables Configured</span>
+          </div>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+          Click any table below to inspect seated guests, monitor capacity levels, and prevent crowding.
+        </p>
+        <div class="seating-studio" id="seatingStudioContainer">
+          <!-- Generated via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: RSVP & MEAL MATRIX -->
+    <div class="tab-pane" id="tab-rsvp">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Filet Mignon (Beef)</div>
+          <div class="kpi-value" id="kpiBeefCount">18</div>
+          <div class="kpi-subtext">Plated tenderloin entrees</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Roasted Sea Bass</div>
+          <div class="kpi-value" id="kpiFishCount">12</div>
+          <div class="kpi-subtext">Pan-seared seafood entrees</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Mushroom Risotto</div>
+          <div class="kpi-value" id="kpiVegCount">6</div>
+          <div class="kpi-subtext">Vegetarian / Vegan entrees</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Allergies / Special</div>
+          <div class="kpi-value" id="kpiAllergyCount">4</div>
+          <div class="kpi-subtext">Severe notes flagged for chef</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Master Guest List & Caterer Tally</div>
+          <button class="btn btn-gold" id="exportCatererBtn">Export Caterer Summary (CSV)</button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Guest Name</th>
+                <th>Party / Household</th>
+                <th>RSVP Status</th>
+                <th>Assigned Table</th>
+                <th>Meal Selection</th>
+                <th>Dietary / Allergy Flag</th>
+                <th>Thank-You</th>
+              </tr>
+            </thead>
+            <tbody id="guestListTbody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: DAY-OF MASTER ITINERARY -->
+    <div class="tab-pane" id="tab-timeline">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Minute-by-Minute Wedding Day Run Sheet</div>
+          <button class="btn btn-gold" id="printTimelineBtn">Print Day-Of Run Sheet</button>
+        </div>
+        <div class="timeline" id="timelineContainer">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: VENDOR DIRECTORY -->
+    <div class="tab-pane" id="tab-vendors">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Professional Vendor Directory & Payment Status</div>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Vendor Role</th>
+                <th>Company & Contact</th>
+                <th>Phone / Email</th>
+                <th>Contract Total</th>
+                <th>Deposit Paid</th>
+                <th>Balance Due</th>
+                <th>Day-Of Arrival</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="vendorListTbody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="privacy-tag">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd"></path>
+      </svg>
+      100% Private (Saved on your device) • 100% Offline (Zero internet needed)
+    </div>
+    <div>EverAfter Master Wedding Suite • Built with Automated Formulas</div>
+  </footer>
+
+  <script>
+    // Initial Seed Data (100% Human & Realistic)
+    const initialGuests = [
+      { name: "Eleanor Vance", party: "Bride & Groom", status: "Attending", table: "Table 1 (Head Table)", meal: "Filet Mignon", allergy: "None", thankYou: "Yes" },
+      { name: "James Sterling", party: "Bride & Groom", status: "Attending", table: "Table 1 (Head Table)", meal: "Filet Mignon", allergy: "None", thankYou: "Yes" },
+      { name: "Marcus Sterling", party: "Best Man Party", status: "Attending", table: "Table 1 (Head Table)", meal: "Roasted Sea Bass", allergy: "None", thankYou: "Yes" },
+      { name: "Sophia Vance", party: "Maid of Honor Party", status: "Attending", table: "Table 1 (Head Table)", meal: "Filet Mignon", allergy: "None", thankYou: "Yes" },
+      { name: "Arthur Vance", party: "Bride Parents", status: "Attending", table: "Table 2 (Bride Family)", meal: "Filet Mignon", allergy: "Low Sodium", thankYou: "Yes" },
+      { name: "Margaret Vance", party: "Bride Parents", status: "Attending", table: "Table 2 (Bride Family)", meal: "Filet Mignon", allergy: "None", thankYou: "Yes" },
+      { name: "Robert Sterling", party: "Groom Parents", status: "Attending", table: "Table 3 (Groom Family)", meal: "Roasted Sea Bass", allergy: "None", thankYou: "Yes" },
+      { name: "Helen Sterling", party: "Groom Parents", status: "Attending", table: "Table 3 (Groom Family)", meal: "Roasted Sea Bass", allergy: "None", thankYou: "Yes" },
+      { name: "Julian Vance", party: "Bride Siblings", status: "Attending", table: "Table 2 (Bride Family)", meal: "Filet Mignon", allergy: "None", thankYou: "Yes" },
+      { name: "Camilla Vance", party: "Bride Siblings", status: "Attending", table: "Table 2 (Bride Family)", meal: "Filet Mignon", allergy: "None", thankYou: "Yes" },
+      { name: "Oliver Sterling", party: "Groom Siblings", status: "Attending", table: "Table 3 (Groom Family)", meal: "Filet Mignon", allergy: "None", thankYou: "Yes" },
+      { name: "Emma Watson", party: "Groom Siblings", status: "Attending", table: "Table 3 (Groom Family)", meal: "Wild Mushroom Risotto", allergy: "Vegetarian", thankYou: "Yes" },
+      { name: "Daniel Hayes", party: "College Friends", status: "Attending", table: "Table 4 (College Crew)", meal: "Filet Mignon", allergy: "None", thankYou: "Yes" },
+      { name: "Sarah Hayes", party: "College Friends", status: "Attending", table: "Table 4 (College Crew)", meal: "Roasted Sea Bass", allergy: "None", thankYou: "Yes" },
+      { name: "Rachel Green", party: "College Friends", status: "Attending", table: "Table 4 (College Crew)", meal: "Wild Mushroom Risotto", allergy: "Vegetarian", thankYou: "Yes" },
+      { name: "Ross Geller", party: "College Friends", status: "Attending", table: "Table 4 (College Crew)", meal: "Filet Mignon", allergy: "None", thankYou: "Yes" },
+      { name: "Harvey Specter", party: "Colleagues", status: "Attending", table: "Table 5 (Colleagues)", meal: "Filet Mignon", allergy: "None", thankYou: "No" },
+      { name: "Donna Paulsen", party: "Colleagues", status: "Attending", table: "Table 5 (Colleagues)", meal: "Roasted Sea Bass", allergy: "None", thankYou: "No" },
+      { name: "Louis Litt", party: "Colleagues", status: "Attending", table: "Table 5 (Colleagues)", meal: "Wild Mushroom Risotto", allergy: "Nut Allergy", thankYou: "No" },
+      { name: "Sheila Sazs", party: "Colleagues", status: "Attending", table: "Table 5 (Colleagues)", meal: "Roasted Sea Bass", allergy: "None", thankYou: "No" },
+      { name: "Anthony Bridgerton", party: "High School", status: "Attending", table: "Table 6 (High School)", meal: "Filet Mignon", allergy: "None", thankYou: "No" },
+      { name: "Kate Sharma", party: "High School", status: "Attending", table: "Table 6 (High School)", meal: "Roasted Sea Bass", allergy: "None", thankYou: "No" },
+      { name: "Ethan Hunt", party: "Adventure Group", status: "Attending", table: "Table 7 (Adventure)", meal: "Filet Mignon", allergy: "None", thankYou: "No" },
+      { name: "Ilsa Faust", party: "Adventure Group", status: "Attending", table: "Table 7 (Adventure)", meal: "Filet Mignon", allergy: "None", thankYou: "No" },
+      { name: "Peter Parker", party: "Art & Photo", status: "Attending", table: "Table 8 (Creative Arts)", meal: "Roasted Sea Bass", allergy: "None", thankYou: "No" },
+      { name: "Mary Jane Watson", party: "Art & Photo", status: "Attending", table: "Table 8 (Creative Arts)", meal: "Wild Mushroom Risotto", allergy: "None", thankYou: "No" },
+      { name: "Gwen Stacy", party: "Art & Photo", status: "Attending", table: "Table 8 (Creative Arts)", meal: "Wild Mushroom Risotto", allergy: "Vegan (Strict)", thankYou: "No" },
+      { name: "Harry Potter", party: "Neighbors", status: "Attending", table: "Table 10 (Neighbors)", meal: "Filet Mignon", allergy: "None", thankYou: "No" },
+      { name: "Ginny Potter", party: "Neighbors", status: "Attending", table: "Table 10 (Neighbors)", meal: "Roasted Sea Bass", allergy: "None", thankYou: "No" },
+      { name: "Ron Weasley", party: "Neighbors", status: "Attending", table: "Table 10 (Neighbors)", meal: "Roasted Sea Bass", allergy: "None", thankYou: "No" },
+      { name: "Hermione Granger", party: "Neighbors", status: "Attending", table: "Table 10 (Neighbors)", meal: "Wild Mushroom Risotto", allergy: "None", thankYou: "No" },
+      { name: "Ted Lasso", party: "Mentors", status: "Attending", table: "Table 12 (Mentors)", meal: "Filet Mignon", allergy: "None", thankYou: "No" },
+      { name: "Rebecca Welton", party: "Mentors", status: "Attending", table: "Table 12 (Mentors)", meal: "Filet Mignon", allergy: "None", thankYou: "No" }
+    ];
+
+    const initialVendors = [
+      { role: "Venue", company: "The Grand Estate", contact: "(555) 234-8901", total: 10500, paid: 5000, due: 5500, arrival: "09:00 AM", status: "Deposit Paid" },
+      { role: "Catering", company: "Artisan Culinary", contact: "(555) 345-6789", total: 9240, paid: 3000, due: 6240, arrival: "02:00 PM", status: "Deposit Paid" },
+      { role: "Bar Service", company: "Artisan Bartending", contact: "(555) 456-7890", total: 3600, paid: 1200, due: 2400, arrival: "03:30 PM", status: "Deposit Paid" },
+      { role: "Photography", company: "Lumina Fine Art", contact: "(555) 567-8901", total: 3800, paid: 1500, due: 2300, arrival: "11:00 AM", status: "Deposit Paid" },
+      { role: "Videography", company: "Cinematic Love", contact: "(555) 678-9012", total: 2600, paid: 1000, due: 1600, arrival: "11:30 AM", status: "Deposit Paid" },
+      { role: "Florist", company: "Bloom & Willow", contact: "(555) 789-0123", total: 3400, paid: 1000, due: 2400, arrival: "10:00 AM", status: "Deposit Paid" },
+      { role: "DJ & Sax", company: "SoundWave Premier", contact: "(555) 890-1234", total: 1950, paid: 750, due: 1200, arrival: "01:30 PM", status: "Deposit Paid" },
+      { role: "Coordinator", company: "Grace & Co. Events", contact: "(555) 901-2345", total: 1800, paid: 900, due: 900, arrival: "08:30 AM", status: "Deposit Paid" },
+      { role: "Cake Baker", company: "Sweet Harmony Patisserie", contact: "(555) 012-3456", total: 900, paid: 300, due: 600, arrival: "02:30 PM", status: "Deposit Paid" },
+      { role: "Hair & Makeup", company: "Glow Bridal Collective", contact: "(555) 123-4567", total: 1300, paid: 400, due: 900, arrival: "07:00 AM", status: "Deposit Paid" },
+      { role: "Guest Shuttles", company: "Executive Luxury Coach", contact: "(555) 234-5678", total: 1050, paid: 500, due: 550, arrival: "03:15 PM", status: "Deposit Paid" },
+      { role: "Lighting Tech", company: "Enchanted Evening Lighting", contact: "(555) 345-6780", total: 1600, paid: 500, due: 1100, arrival: "08:00 AM", status: "Deposit Paid" }
+    ];
+
+    const initialTimeline = [
+      { time: "07:00 AM", title: "Bridal Suite Glam & Breakfast", desc: "Breakfast pastries & espresso delivered; bridal attendants assemble." },
+      { time: "08:00 AM", title: "Hair & Airbrush Makeup Artistry", desc: "35-minute slots for bridesmaids; bride glam begins at 10:00 AM." },
+      { time: "09:00 AM", title: "Venue Access & Decor Production", desc: "Florals, lighting and Chiavari chairs placed in ballroom & lawn." },
+      { time: "11:00 AM", title: "Photography & Videography Arrival", desc: "Capturing flat lays: gown, rings, invitations, and bridal suite smiles." },
+      { time: "12:45 PM", title: "Bride Steps Into Gown", desc: "Mother of the bride zips gown; maid of honor secures veil." },
+      { time: "01:15 PM", title: "Intimate First Look & Couple Portraits", desc: "Private reveal in rose garden terrace followed by golden hour photos." },
+      { time: "02:00 PM", title: "Bridal Party & Family Formal Photos", desc: "Full wedding party portraits, parents, grandparents, and VIPs." },
+      { time: "03:30 PM", title: "Guest Arrival & Welcome Music", desc: "Acoustic strings prelude; fruit-infused water and programs handed out." },
+      { time: "04:00 PM", title: "Ceremony Processional & Vows", desc: "Processional begins; bride enters to live sax Canon in D; emotional vows." },
+      { time: "04:30 PM", title: "Marriage License Signing & Recessional", desc: "Witnesses sign certificate in estate library with pastor." },
+      { time: "04:45 PM", title: "Cocktail Hour & Passed Hors d'oeuvres", desc: "His & Hers signature cocktails, artisan charcuterie on garden patio." },
+      { time: "06:15 PM", title: "Grand Ballroom Entrance", desc: "Wedding party introduced to upbeat anthem; bride and groom welcome guests." },
+      { time: "06:45 PM", title: "3-Course Plated Dinner Service", desc: "Salad course followed by filet mignon, sea bass, and risotto." },
+      { time: "07:45 PM", title: "Toasts & Speeches", desc: "Father of bride, maid of honor, and best man speeches." },
+      { time: "08:05 PM", title: "First Dance & Parent Dances", desc: "Bride & Groom dance to 'Lover'; Father-Daughter and Mother-Son dances." },
+      { time: "08:20 PM", title: "Cake Cutting & Dessert Bar", desc: "Formal cake cutting photo; coffee and mini dessert station open." },
+      { time: "08:30 PM", title: "Dance Floor Open Celebration", desc: "Live DJ & Saxophone open dance floor; party continues until night." },
+      { time: "11:15 PM", title: "Grand Sparkler Send-Off", desc: "Guests line estate pathway with 36-inch sparklers; getaway car departs." }
+    ];
+
+    const tableConfigs = [
+      { name: "Table 1 (Head Table)", cap: 8, shape: "Kings Table", guests: ["Eleanor Vance", "James Sterling", "Marcus Sterling", "Sophia Vance"] },
+      { name: "Table 2 (Bride Family)", cap: 10, shape: "72\" Round", guests: ["Arthur Vance", "Margaret Vance", "Julian Vance", "Camilla Vance"] },
+      { name: "Table 3 (Groom Family)", cap: 10, shape: "72\" Round", guests: ["Robert Sterling", "Helen Sterling", "Oliver Sterling", "Emma Watson"] },
+      { name: "Table 4 (College Crew)", cap: 8, shape: "60\" Round", guests: ["Daniel Hayes", "Sarah Hayes", "Rachel Green", "Ross Geller"] },
+      { name: "Table 5 (Colleagues)", cap: 8, shape: "60\" Round", guests: ["Harvey Specter", "Donna Paulsen", "Louis Litt", "Sheila Sazs"] },
+      { name: "Table 6 (High School)", cap: 8, shape: "60\" Round", guests: ["Anthony Bridgerton", "Kate Sharma"] },
+      { name: "Table 7 (Adventure)", cap: 8, shape: "60\" Round", guests: ["Ethan Hunt", "Ilsa Faust"] },
+      { name: "Table 8 (Creative Arts)", cap: 8, shape: "60\" Round", guests: ["Peter Parker", "Mary Jane Watson", "Gwen Stacy"] },
+      { name: "Table 9 (Cousins)", cap: 10, shape: "72\" Round", guests: [] },
+      { name: "Table 10 (Neighbors)", cap: 8, shape: "60\" Round", guests: ["Harry Potter", "Ginny Potter", "Ron Weasley", "Hermione Granger"] },
+      { name: "Table 11 (Close Friends)", cap: 8, shape: "60\" Round", guests: [] },
+      { name: "Table 12 (Mentors)", cap: 8, shape: "60\" Round", guests: ["Ted Lasso", "Rebecca Welton"] }
+    ];
+
+    // Local state
+    let weddingState = {
+      guests: initialGuests,
+      vendors: initialVendors,
+      timeline: initialTimeline,
+      tables: tableConfigs
+    };
+
+    // Load from local storage if available
+    function loadLocalState() {
+      try {
+        const saved = localStorage.getItem("everafter_wedding_data");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.guests) {
+            weddingState = parsed;
+          }
+        }
+      } catch (e) {
+        // Fallback to initial seed
+      }
+    }
+
+    function saveLocalState() {
+      try {
+        localStorage.setItem("everafter_wedding_data", JSON.stringify(weddingState));
+      } catch (e) {
+        // Storage unavailable
+      }
+    }
+
+    // Format currency
+    function fmtCurr(n) {
+      return "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    // Tab Navigation
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        const targetId = btn.getAttribute("data-tab");
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) targetPane.classList.add("active");
+      });
+    });
+
+    // Theme Toggle
+    const themeBtn = document.getElementById("themeToggleBtn");
+    themeBtn.addEventListener("click", () => {
+      const current = document.body.getAttribute("data-theme");
+      const next = current === "dark" ? "light" : "dark";
+      document.body.setAttribute("data-theme", next);
+      themeBtn.textContent = next === "dark" ? "Light Mode" : "Dark Mode";
+    });
+
+    // Budget Calculator
+    function updateBudgetCalculations() {
+      const target = parseFloat(document.getElementById("inputTargetBudget").value);
+      const guests = parseInt(document.getElementById("inputGuestCount").value, 10);
+      const venue = parseFloat(document.getElementById("inputVenueFee").value);
+      const meal = parseFloat(document.getElementById("inputMealCost").value);
+      const bar = parseFloat(document.getElementById("inputBarCost").value);
+      const photo = parseFloat(document.getElementById("inputPhotoVideo").value);
+      const florals = parseFloat(document.getElementById("inputFlorals").value);
+      const music = parseFloat(document.getElementById("inputMusic").value);
+      const attire = parseFloat(document.getElementById("inputAttire").value);
+
+      // Label sync
+      document.getElementById("valTargetBudget").textContent = fmtCurr(target);
+      document.getElementById("valGuestCount").textContent = guests + " Guests";
+      document.getElementById("valVenueFee").textContent = fmtCurr(venue);
+      document.getElementById("valMealCost").textContent = "$" + meal + " / plate";
+      document.getElementById("valBarCost").textContent = "$" + bar + " / person";
+      document.getElementById("valPhotoVideo").textContent = fmtCurr(photo);
+      document.getElementById("valFlorals").textContent = fmtCurr(florals);
+      document.getElementById("valMusic").textContent = fmtCurr(music);
+      document.getElementById("valAttire").textContent = fmtCurr(attire);
+
+      // Calculations
+      const totalCatering = guests * meal;
+      const totalBar = guests * bar;
+      const serviceAndTax = (totalCatering + totalBar) * 0.2825; // 20% service + 8.25% tax
+      const totalFoodAndDrink = totalCatering + totalBar + serviceAndTax;
+      const otherCosts = 2800; // Invitations, wedding cake, transport, tips
+
+      const totalEstimated = venue + totalFoodAndDrink + photo + florals + music + attire + otherCosts;
+      const costPerGuest = totalEstimated / guests;
+      const variance = target - totalEstimated;
+
+      document.getElementById("kpiTargetBudget").textContent = fmtCurr(target);
+      document.getElementById("kpiTotalEstimated").textContent = fmtCurr(totalEstimated);
+      document.getElementById("kpiCostPerGuest").textContent = "$" + costPerGuest.toFixed(2);
+
+      const varSubtext = document.getElementById("kpiVarianceSubtext");
+      if (variance >= 0) {
+        varSubtext.textContent = fmtCurr(variance) + " Under Budget (Safe)";
+        varSubtext.style.color = "var(--accent-green)";
+      } else {
+        varSubtext.textContent = fmtCurr(Math.abs(variance)) + " Over Target Budget!";
+        varSubtext.style.color = "var(--accent-red)";
+      }
+
+      // Breakdown Table
+      const items = [
+        { name: "Venue & Site Access", cost: venue },
+        { name: "Catering & Plated Dinner", cost: totalCatering },
+        { name: "Bar & Beverage Service", cost: totalBar },
+        { name: "Catering Taxes & 20% Gratuity", cost: serviceAndTax },
+        { name: "Photo & Cinema Production", cost: photo },
+        { name: "Floral Design & Centerpieces", cost: florals },
+        { name: "DJ, Live Music & Audio", cost: music },
+        { name: "Attire, Hair, Makeup & Rings", cost: attire },
+        { name: "Cake, Transport, Invites & Sundry", cost: otherCosts }
+      ];
+
+      const tbody = document.getElementById("budgetBreakdownTbody");
+      tbody.innerHTML = "";
+      items.forEach(it => {
+        const pct = ((it.cost / totalEstimated) * 100).toFixed(1);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${it.name}</strong></td>
+          <td>${fmtCurr(it.cost)}</td>
+          <td><span class="badge badge-info">${pct}%</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Automated advice
+      const advice = document.getElementById("financialAdviceBox");
+      if (variance < 0) {
+        advice.innerHTML = `
+          <p style="color: var(--accent-red); font-weight: bold; margin-bottom: 0.5rem;">⚠️ Budget Alert: You are currently exceeding your spending target.</p>
+          <p>Consider adjusting guest headcounts by 10-15 seats, or opting for seasonal floral varieties to save an estimated $1,200-$1,800 without sacrificing guest experience.</p>
+        `;
+      } else if (variance > 4000) {
+        advice.innerHTML = `
+          <p style="color: var(--accent-green); font-weight: bold; margin-bottom: 0.5rem;">✨ Excellent Financial Cushion!</p>
+          <p>You have a surplus of ${fmtCurr(variance)}. We recommend keeping at least $1,500 in an emergency contingency reserve, and applying the remaining balance toward your honeymoon fund or upgraded wedding album.</p>
+        `;
+      } else {
+        advice.innerHTML = `
+          <p style="color: var(--accent-gold); font-weight: bold; margin-bottom: 0.5rem;">🎯 Perfectly Balanced Wedding Plan!</p>
+          <p>Your projected expenditures closely match your spending limits. Lock in vendor contracts early to prevent seasonal price inflation.</p>
+        `;
+      }
+    }
+
+    // Attach slider listeners
+    [
+      "inputTargetBudget", "inputGuestCount", "inputVenueFee",
+      "inputMealCost", "inputBarCost", "inputPhotoVideo",
+      "inputFlorals", "inputMusic", "inputAttire"
+    ].forEach(id => {
+      document.getElementById(id).addEventListener("input", updateBudgetCalculations);
+    });
+
+    // Presets
+    document.getElementById("presetIntimateBtn").addEventListener("click", () => {
+      document.getElementById("inputTargetBudget").value = 25000;
+      document.getElementById("inputGuestCount").value = 50;
+      document.getElementById("inputVenueFee").value = 6000;
+      document.getElementById("inputMealCost").value = 85;
+      document.getElementById("inputBarCost").value = 35;
+      document.getElementById("inputPhotoVideo").value = 3800;
+      document.getElementById("inputFlorals").value = 2500;
+      document.getElementById("inputMusic").value = 1400;
+      document.getElementById("inputAttire").value = 3500;
+      updateBudgetCalculations();
+    });
+
+    document.getElementById("presetClassicBtn").addEventListener("click", () => {
+      document.getElementById("inputTargetBudget").value = 45000;
+      document.getElementById("inputGuestCount").value = 120;
+      document.getElementById("inputVenueFee").value = 10500;
+      document.getElementById("inputMealCost").value = 77;
+      document.getElementById("inputBarCost").value = 30;
+      document.getElementById("inputPhotoVideo").value = 6400;
+      document.getElementById("inputFlorals").value = 5000;
+      document.getElementById("inputMusic").value = 1950;
+      document.getElementById("inputAttire").value = 5800;
+      updateBudgetCalculations();
+    });
+
+    document.getElementById("presetGrandBtn").addEventListener("click", () => {
+      document.getElementById("inputTargetBudget").value = 75000;
+      document.getElementById("inputGuestCount").value = 200;
+      document.getElementById("inputVenueFee").value = 18000;
+      document.getElementById("inputMealCost").value = 95;
+      document.getElementById("inputBarCost").value = 40;
+      document.getElementById("inputPhotoVideo").value = 9500;
+      document.getElementById("inputFlorals").value = 9000;
+      document.getElementById("inputMusic").value = 3500;
+      document.getElementById("inputAttire").value = 9000;
+      updateBudgetCalculations();
+    });
+
+    // Render Seating Studio
+    function renderSeatingStudio() {
+      const container = document.getElementById("seatingStudioContainer");
+      container.innerHTML = "";
+
+      weddingState.tables.forEach(tbl => {
+        const pod = document.createElement("div");
+        pod.className = "table-pod";
+
+        const count = tbl.guests.length;
+        const pct = Math.min(100, Math.round((count / tbl.cap) * 100));
+        let meterColor = "var(--accent-green)";
+        if (pct >= 100) meterColor = "var(--accent-gold)";
+        if (count > tbl.cap) meterColor = "var(--accent-red)";
+
+        pod.innerHTML = `
+          <div class="table-pod-header">
+            <span class="table-name">${tbl.name}</span>
+            <span class="table-capacity" style="color: ${meterColor}">${count} / ${tbl.cap} Seats</span>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-secondary);">${tbl.shape}</div>
+          <div class="meter-bar">
+            <div class="meter-fill" style="width: ${pct}%; background-color: ${meterColor};"></div>
+          </div>
+          <div class="guest-chips">
+            ${tbl.guests.map(g => `<span class="guest-chip">👤 ${g}</span>`).join("")}
+            ${tbl.guests.length === 0 ? '<span style="font-size: 0.75rem; color: var(--text-secondary); font-style: italic;">No guests assigned yet</span>' : ''}
+          </div>
+        `;
+        container.appendChild(pod);
+      });
+    }
+
+    // Render Guest List & RSVPs
+    function renderGuestList() {
+      const tbody = document.getElementById("guestListTbody");
+      tbody.innerHTML = "";
+
+      let beef = 0, fish = 0, veg = 0, allergies = 0;
+
+      weddingState.guests.forEach(g => {
+        if (g.meal.includes("Filet")) beef++;
+        else if (g.meal.includes("Sea Bass")) fish++;
+        else if (g.meal.includes("Risotto")) veg++;
+
+        if (g.allergy !== "None") allergies++;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${g.name}</strong></td>
+          <td>${g.party}</td>
+          <td><span class="badge ${g.status === 'Attending' ? 'badge-success' : 'badge-warning'}">${g.status}</span></td>
+          <td>${g.table}</td>
+          <td>${g.meal}</td>
+          <td>${g.allergy !== 'None' ? `<span class="badge badge-danger">⚠️ ${g.allergy}</span>` : '<span style="color: var(--text-secondary);">None</span>'}</td>
+          <td>${g.thankYou === 'Yes' ? '<span class="badge badge-success">Mailed</span>' : '<span class="badge badge-warning">Pending</span>'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById("kpiBeefCount").textContent = beef;
+      document.getElementById("kpiFishCount").textContent = fish;
+      document.getElementById("kpiVegCount").textContent = veg;
+      document.getElementById("kpiAllergyCount").textContent = allergies;
+    }
+
+    // Render Timeline
+    function renderTimeline() {
+      const container = document.getElementById("timelineContainer");
+      container.innerHTML = "";
+
+      weddingState.timeline.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "timeline-item";
+        div.innerHTML = `
+          <div class="timeline-dot"></div>
+          <div class="timeline-time">${item.time}</div>
+          <div class="timeline-title">${item.title}</div>
+          <div class="timeline-desc">${item.desc}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Render Vendors
+    function renderVendors() {
+      const tbody = document.getElementById("vendorListTbody");
+      tbody.innerHTML = "";
+
+      weddingState.vendors.forEach(v => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${v.role}</strong></td>
+          <td>${v.company}</td>
+          <td>${v.contact}</td>
+          <td>${fmtCurr(v.total)}</td>
+          <td>${fmtCurr(v.paid)}</td>
+          <td style="color: var(--accent-gold); font-weight: bold;">${fmtCurr(v.due)}</td>
+          <td>${v.arrival}</td>
+          <td><span class="badge badge-success">${v.status}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Print Buttons
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+    document.getElementById("printTimelineBtn").addEventListener("click", () => {
+      document.querySelector('[data-tab="tab-timeline"]').click();
+      window.print();
+    });
+
+    // CSV Exports
+    document.getElementById("exportCsvBtn").addEventListener("click", () => {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Guest Name,Party,Status,Assigned Table,Meal Choice,Dietary Restriction,Thank-You Sent\n";
+      weddingState.guests.forEach(g => {
+        csvContent += `"${g.name}","${g.party}","${g.status}","${g.table}","${g.meal}","${g.allergy}","${g.thankYou}"\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "wedding_guest_rsvp_master.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    document.getElementById("exportCatererBtn").addEventListener("click", () => {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Table,Guest Name,Meal Selection,Dietary / Allergy Flag\n";
+      weddingState.guests.forEach(g => {
+        csvContent += `"${g.table}","${g.name}","${g.meal}","${g.allergy}"\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "caterer_master_kitchen_manifest.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // Backup & Restore
+    document.getElementById("backupBtn").addEventListener("click", () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(weddingState, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "everafter_wedding_data_backup.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    });
+
+    const restoreInput = document.getElementById("restoreFileInput");
+    document.getElementById("restoreBtn").addEventListener("click", () => restoreInput.click());
+    restoreInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          if (parsed && parsed.guests) {
+            weddingState = parsed;
+            saveLocalState();
+            renderGuestList();
+            renderSeatingStudio();
+            renderTimeline();
+            renderVendors();
+            alert("Data restored successfully!");
+          }
+        } catch (err) {
+          alert("Invalid backup file.");
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Initialize
+    loadLocalState();
+    updateBudgetCalculations();
+    renderSeatingStudio();
+    renderGuestList();
+    renderTimeline();
+    renderVendors();
+  </script>
+</body>
+</html>
